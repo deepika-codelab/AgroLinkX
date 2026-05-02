@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Signup | AgroLinkX</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-theme="light">
+  <!-- Fixed Navbar -->
+  <header>
+    <div class="logo">
+      <i class="ri-leaf-line"></i> AgroLinkX
+    </div>
+
+    <nav>
+      <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
+      <button id="browseBtn"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
+      <button id="themeToggle"><i class="ri-sun-line"></i></button>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+      <button id="loginBtn"><i class="ri-login-box-line"></i> <span>Login</span></button>
+    </nav>
+  </header>
+
+  <!-- Signup Section -->
+  <main>
+    <div class="login-container">
+      <div class="login-box">
+        <i class="ri-user-add-line" style="font-size: 50px; color: var(--primary); margin-bottom: 10px;"></i>
+        <h2 id="signup-heading">Sign Up</h2>
+        <p>Create a new account</p>
+
+        <form id="signupForm" autocomplete="on" novalidate>
+          <label for="name">Full Name</label>
+          <input id="name" name="name" type="text" placeholder="Enter your full name" required>
+
+          <label for="email">Email Address</label>
+          <input id="email" name="email" type="email" placeholder="Enter your email" required>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter your password" required>
+
+          <label for="confirmPassword">Confirm Password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm your password" required>
+
+          <button type="submit" id="submitBtn">Sign Up</button>
+        </form>
+
+        <p id="successMsg" style="color:green; font-weight:600; margin-top:12px; display:none;">
+          ✅ Signup Successful!
+        </p>
+
+        <p class="signup-text">Already have an account? <a href="login.html">Login</a></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- Navigation ---
+    document.getElementById("homeBtn").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("browseBtn").addEventListener("click", () => {
+      window.location.href = "browse.html";
+    });
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      window.location.href = "login.html";
+    });
+
+    // --- Theme Toggle ---
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      const currentTheme = body.getAttribute("data-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      body.setAttribute("data-theme", newTheme);
+      themeToggle.innerHTML =
+        newTheme === "light"
+          ? '<i class="ri-sun-line"></i>'
+          : '<i class="ri-moon-line"></i>';
+    });
+
+    // --- Language Translations ---
+    const translations = {
+      en: {
+        heading: "Sign Up",
+        subtitle: "Create a new account",
+        name: "Full Name",
+        email: "Email Address",
+        password: "Password",
+        confirmPassword: "Confirm Password",
+        signupBtn: "Sign Up",
+        success: "✅ Signup Successful!",
+        alreadyText: "Already have an account? <a href='login.html'>Login</a>"
+      },
+      ta: {
+        heading: "பதிவு செய்க",
+        subtitle: "புதிய கணக்கை உருவாக்கவும்",
+        name: "முழு பெயர்",
+        email: "மின்னஞ்சல் முகவரி",
+        password: "கடவுச்சொல்",
+        confirmPassword: "கடவுச்சொல் உறுதிசெய்க",
+        signupBtn: "பதிவு செய்க",
+        success: "✅ பதிவு வெற்றிகரமாக முடிந்தது!",
+        alreadyText: "ஏற்கனவே கணக்கு உள்ளதா? <a href='login.html'>உள்நுழைக</a>"
+      }
+    };
+
+    const langSelect = document.getElementById("languageSelect");
+    langSelect.addEventListener("change", () => {
+      const lang = langSelect.value;
+      const t = translations[lang];
+
+      document.getElementById("signup-heading").textContent = t.heading;
+      document.querySelector(".login-box p").textContent = t.subtitle;
+      document.querySelector('label[for="name"]').textContent = t.name;
+      document.querySelector('label[for="email"]').textContent = t.email;
+      document.querySelector('label[for="password"]').textContent = t.password;
+      document.querySelector('label[for="confirmPassword"]').textContent = t.confirmPassword;
+      document.getElementById("submitBtn").textContent = t.signupBtn;
+      document.querySelector(".signup-text").innerHTML = t.alreadyText;
+      document.getElementById("successMsg").textContent = t.success;
+    });
+
+    // --- Signup Logic ---
+    const form = document.getElementById("signupForm");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const pass = document.getElementById("password").value;
+      const confirm = document.getElementById("confirmPassword").value;
+
+      if (pass !== confirm) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      // Show success message in green
+      successMsg.style.display = "block";
+
+      // Redirect to Browse Crops after 1.5 seconds
+      setTimeout(() => {
+        window.location.href = "browse.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login | AgroLinkX</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-theme="light">
+  <!-- ✅ Fixed Navbar -->
+  <header>
+    <div class="logo">
+      <i class="ri-leaf-line"></i> AgroLinkX
+    </div>
+
+    <nav>
+      <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
+      <button id="browseBtn"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
+      <button id="themeToggle"><i class="ri-sun-line"></i></button>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+      <button id="loginBtn" class="active"><i class="ri-login-box-line"></i> <span>Login</span></button>
+    </nav>
+  </header>
+
+  <!-- ✅ Login Section -->
+  <main>
+    <div class="login-container">
+      <div class="login-box">
+        <i class="ri-user-3-line" style="font-size: 50px; color: var(--primary); margin-bottom: 10px;"></i>
+        <h2 id="login-heading">Login</h2>
+        <p>Sign in to your account</p>
+
+        <form id="loginForm" autocomplete="on" novalidate>
+          <label for="email">Email Address</label>
+          <input id="email" name="email" type="email" placeholder="Enter your email" required>
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter your password" required>
+
+          <button type="submit" id="submitBtn">Login</button>
+        </form>
+
+        <p id="successMsg" style="color:green; font-weight:600; margin-top:12px; display:none;">
+          ✅ Login Successful!
+        </p>
+
+        <!-- ✅ Corrected Sign Up Link -->
+        <p class="signup-text">Don't have an account? <a href="signup.html">Sign Up</a></p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // --- Navigation ---
+    document.getElementById("homeBtn").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    document.getElementById("browseBtn").addEventListener("click", () => {
+      window.location.href = "browse.html";
+    });
+
+    // --- Theme Toggle ---
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      const currentTheme = body.getAttribute("data-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      body.setAttribute("data-theme", newTheme);
+      themeToggle.innerHTML =
+        newTheme === "light"
+          ? '<i class="ri-sun-line"></i>'
+          : '<i class="ri-moon-line"></i>';
+    });
+
+    // --- Language Translations ---
+    const translations = {
+      en: {
+        heading: "Login",
+        subtitle: "Sign in to your account",
+        email: "Email Address",
+        emailPlaceholder: "Enter your email",
+        password: "Password",
+        passwordPlaceholder: "Enter your password",
+        loginBtn: "Login",
+        signupText: "Don't have an account? <a href='signup.html'>Sign Up</a>",
+        success: "✅ Login Successful!"
+      },
+      ta: {
+        heading: "உள்நுழைவு",
+        subtitle: "உங்கள் கணக்கில் உள்நுழைக",
+        email: "மின்னஞ்சல் முகவரி",
+        emailPlaceholder: "உங்கள் மின்னஞ்சலை உள்ளிடுக",
+        password: "கடவுச்சொல்",
+        passwordPlaceholder: "உங்கள் கடவுச்சொல்லை உள்ளிடுக",
+        loginBtn: "உள்நுழைவு",
+        signupText: "கணக்கு இல்லையா? <a href='signup.html'>பதிவு செய்க</a>",
+        success: "✅ உள்நுழைவு வெற்றிகரமாக முடிந்தது!"
+      }
+    };
+
+    const langSelect = document.getElementById("languageSelect");
+    langSelect.addEventListener("change", () => {
+      const lang = langSelect.value;
+      const t = translations[lang];
+
+      document.getElementById("login-heading").textContent = t.heading;
+      document.querySelector(".login-box p").textContent = t.subtitle;
+      document.querySelector('label[for="email"]').textContent = t.email;
+      document.getElementById("email").placeholder = t.emailPlaceholder;
+      document.querySelector('label[for="password"]').textContent = t.password;
+      document.getElementById("password").placeholder = t.passwordPlaceholder;
+      document.getElementById("submitBtn").textContent = t.loginBtn;
+      document.querySelector(".signup-text").innerHTML = t.signupText;
+      document.getElementById("successMsg").textContent = t.success;
+    });
+
+    // --- Login Form Logic ---
+    const form = document.getElementById("loginForm");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // ✅ Show success message in green
+      successMsg.style.display = "block";
+
+      // ✅ Redirect to Browse Crops after 1.5s
+      setTimeout(() => {
+        window.location.href = "browse.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

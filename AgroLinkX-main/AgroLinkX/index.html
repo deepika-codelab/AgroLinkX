@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgroLinkX</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* Chatbot Styles */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #00ff88;
+      color: #000;
+      border: none;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+
+    .chatbot-box {
+      position: fixed;
+      bottom: 90px;
+      right: 25px;
+      width: 320px;
+      background: var(--card-bg, #f5f5f5);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 200;
+    }
+
+    .chatbot-header {
+      background: #00ff88;
+      color: #000;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chatbot-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .chatbot-input {
+      display: flex;
+      border-top: 1px solid #333;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      background: var(--bg-color, #fff);
+      color: var(--text-color, #000);
+      outline: none;
+    }
+
+    .chatbot-input button {
+      background: #00ff88;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .bot, .user {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .user { background: #00ff88; color: #000; align-self: flex-end; margin-left: auto; }
+    .bot { background: #fff; color: #000; border: 1px solid #444; }
+  </style>
+</head>
+
+<body data-theme="light">
+  <header>
+    <div class="logo"><i class="ri-leaf-line"></i> AgroLinkX</div>
+    <nav>
+      <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
+      <button id="browseBtn"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
+      <button id="themeToggle"><i class="ri-sun-line"></i></button>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+      <button id="loginBtn"><i class="ri-login-box-line"></i> <span>Login</span></button>
+    </nav>
+  </header>
+
+<section class="hero">
+  <div class="hero-text">
+    <h1 id="title">Fresh from Farm to Your Home</h1>
+    <p id="subtitle">Connect directly with local farmers. Buy fresh, organic crops at fair prices.</p>
+    <div class="buttons">
+      <button class="shop" id="shopBtn">Shop Now</button>
+      <button class="sell" id="sellBtn">Sell Your Crops</button>
+    </div>
+    <p style="margin-top: 18px; font-size: 1rem;">
+      🌾 <a href="village.html" id="villageLink" style="color:#15803d; text-decoration:none; font-weight:600;">
+        Visit AI Village Support Portal →
+      </a>
+    </p>
+  </div>
+  <div class="hero-img">
+    <img src="Hero_farmers_market_produce_a5ec250f.png" alt="Farmers Market" />
+  </div>
+</section>
+
+
+  <!-- 🤖 Chatbot -->
+  <button class="chatbot-btn" id="chatToggle"><i class="ri-robot-line"></i></button>
+
+  <div class="chatbot-box" id="chatBox">
+    <div class="chatbot-header" id="chatHeader">🤖 AgroBot — Ask about Crops!</div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="bot" id="welcomeMsg">Hi there! 🌱 Ask me about crops, fertilizers, or farming tips.</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="userInput" placeholder="Type your question..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+  // --- Language Translations ---
+  const translations = {
+    en: {
+      title: "Fresh from Farm to Your Home",
+      subtitle: "Connect directly with local farmers. Buy fresh, organic crops at fair prices.",
+      shop: "Shop Now",
+      sell: "Sell Your Crops",
+      home: "Home",
+      browse: "Browse Crops",
+      login: "Login",
+      chatbotHeader: "🤖 AgroBot — Ask about Crops!",
+      chatbotWelcome: "Hi there! 🌱 Ask me about crops, fertilizers, or farming tips.",
+      placeholder: "Type your question...",
+      send: "Send"
+    },
+    ta: {
+      title: "பண்ணையிலிருந்து உங்கள் வீட்டிற்கு புதிய பொருட்கள்",
+      subtitle: "உள்ளூர் விவசாயிகளுடன் நேரடியாக இணைக. நியாயமான விலையில் புதிய, ஆர்கானிக் பயிர்களை வாங்குங்கள்.",
+      shop: "இப்போது வாங்கவும்",
+      sell: "உங்கள் பயிர்களை விற்கவும்",
+      home: "முகப்பு",
+      browse: "பயிர்களை உலாவவும்",
+      login: "உள்நுழைய",
+      chatbotHeader: "🤖 அக்ரோபாட் — பயிர்கள் குறித்து கேளுங்கள்!",
+      chatbotWelcome: "வணக்கம்! 🌱 பயிர்கள், உரங்கள் அல்லது வேளாண்மை குறிப்புகள் பற்றி கேளுங்கள்.",
+      placeholder: "உங்கள் கேள்வியை எழுதுங்கள்...",
+      send: "அனுப்பு"
+    }
+  };
+
+  const langSelect = document.getElementById("languageSelect");
+  const themeToggle = document.getElementById("themeToggle");
+
+  // Apply Language
+  function applyLanguage(lang) {
+    const t = translations[lang];
+    document.getElementById("title").textContent = t.title;
+    document.getElementById("subtitle").textContent = t.subtitle;
+    document.getElementById("shopBtn").textContent = t.shop;
+    document.getElementById("sellBtn").textContent = t.sell;
+    document.getElementById("homeBtn").querySelector("span").textContent = t.home;
+    document.getElementById("browseBtn").querySelector("span").textContent = t.browse;
+    document.getElementById("loginBtn").querySelector("span").textContent = t.login;
+    document.getElementById("chatHeader").textContent = t.chatbotHeader;
+    document.getElementById("welcomeMsg").textContent = t.chatbotWelcome;
+    document.getElementById("userInput").placeholder = t.placeholder;
+    document.getElementById("sendBtn").textContent = t.send;
+  }
+
+  // On Language Change
+  langSelect.addEventListener("change", () => {
+    const lang = langSelect.value;
+    applyLanguage(lang);
+    localStorage.setItem("language", lang);
+  });
+
+  // On Load
+  window.addEventListener("DOMContentLoaded", () => {
+    const savedLang = localStorage.getItem("language") || "en";
+    langSelect.value = savedLang;
+    applyLanguage(savedLang);
+  });
+
+  // Theme Toggle
+  themeToggle.addEventListener("click", () => {
+    const body = document.body;
+    const currentTheme = body.getAttribute("data-theme");
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    body.setAttribute("data-theme", newTheme);
+    themeToggle.innerHTML = newTheme === "light" ? '<i class="ri-sun-line"></i>' : '<i class="ri-moon-line"></i>';
+    localStorage.setItem("theme", newTheme);
+  });
+
+  // Navigation
+  document.getElementById("loginBtn").addEventListener("click", () => window.location.href = "login.html");
+  document.getElementById("shopBtn").addEventListener("click", () => window.location.href = "browse.html");
+  document.getElementById("browseBtn").addEventListener("click", () => window.location.href = "browse.html");
+  document.getElementById("sellBtn").addEventListener("click", () => window.location.href = "sell.html");
+
+  // 🤖 Chatbot
+  const chatToggle = document.getElementById('chatToggle');
+  const chatBox = document.getElementById('chatBox');
+  const sendBtn = document.getElementById('sendBtn');
+  const chatMessages = document.getElementById('chatMessages');
+  const userInput = document.getElementById('userInput');
+
+  chatToggle.addEventListener('click', () => {
+    chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+    chatBox.style.flexDirection = 'column';
+  });
+
+  sendBtn.addEventListener('click', sendMessage);
+  userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+
+  async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+    appendMessage('user', text);
+    userInput.value = '';
+    appendMessage('bot', '...');
+    const reply = await getBotResponse(text);
+    chatMessages.lastElementChild.remove();
+    appendMessage('bot', reply);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function appendMessage(sender, msg) {
+    const div = document.createElement('div');
+    div.className = sender;
+    div.textContent = msg;
+    chatMessages.appendChild(div);
+  }
+
+  async function getBotResponse(query) {
+    const lang = langSelect.value;
+    query = query.toLowerCase();
+
+    if (lang === 'ta') {
+      if (query.includes('உரம்')) return '🌿 சமநிலையான மண் ஊட்டச்சத்துகளுக்கு இயற்கை உரம் அல்லது NPK 10:26:26 பயன்படுத்துங்கள்.';
+      if (query.includes('நீர்ப்பாசனம்')) return '💧 துளி நீர்ப்பாசனம் நீரைச் சேமிக்க சிறந்தது.';
+      if (query.includes('பூச்சி')) return '🐛 வேப்ப எண்ணெய் தெளிப்பு இயற்கையாக பூச்சிகளை கட்டுப்படுத்த உதவும்.';
+      if (query.includes('மண்')) return '🪴 பெரும்பாலான பயிர்களுக்கு லோமி மண் சிறந்தது.';
+      if (query.includes('கோதுமை')) return '🌾 கோதுமை குளிர்ந்த காலநிலையிலும் நல்ல வடிகால் கொண்ட மண்ணிலும் நன்றாக வளர்கிறது.';
+      if (query.includes('மாம்பழம்')) return '🥭 மாம்பழ மரங்கள் மிதமான மழைபொழிவு உள்ள வெப்பமண்டலங்களில் சிறப்பாக வளர்கின்றன.';
+      return '🤖 நான் இன்னும் கற்றுக்கொண்டு வருகிறேன்! உரம், நீர்ப்பாசனம், மண், அல்லது குறிப்பிட்ட பயிர்கள் பற்றி கேளுங்கள்.';
+    }
+
+    // English responses
+    if (query.includes('fertilizer')) return '🌿 Use organic compost or NPK 10:26:26 for balanced soil nutrients.';
+    if (query.includes('irrigation')) return '💧 Drip irrigation is best for saving water and ensuring proper hydration.';
+    if (query.includes('pest')) return '🐛 Neem oil spray helps naturally control common crop pests.';
+    if (query.includes('soil')) return '🪴 Loamy soil is ideal for most crops due to good drainage and nutrients.';
+    if (query.includes('wheat')) return '🌾 Wheat grows best in cool climates with well-drained loamy soil.';
+    if (query.includes('mango')) return '🥭 Mango trees thrive in tropical climates with moderate rainfall.';
+    return '🤖 I’m still learning! Try asking about fertilizer, irrigation, soil, or specific crops.';
+  }
+</script>
+</body>
+</html>

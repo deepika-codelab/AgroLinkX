@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Crops | AgroLinkX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Common CSS -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: 0.3s;
+    }
+
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000;
+      --card-bg: #f5f5f5;
+      --btn-color: #00ff88;
+      --accent-color: #00ff88;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #fff;
+      --card-bg: #1a1a1a;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: var(--card-bg);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-color);
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover, .nav-links .active {
+      color: #00ff88;
+    }
+
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 25px auto;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      width: 200px;
+      outline: none;
+    }
+
+    .filter-bar button {
+      background-color: #00ff88;
+      border: none;
+      border-radius: 8px;
+      color: #000;
+      padding: 8px 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .filter-bar button:hover {
+      background-color: var(--btn-color);
+    }
+
+    .crop-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .crop-card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .crop-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .crop-card img {
+      width: 100%;
+      height: 200px;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .crop-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .crop-card p {
+      color: #aaa;
+      font-size: 0.9rem;
+      margin: 4px 0;
+    }
+
+    .crop-card .price {
+      color: #00ff88;
+      font-weight: bold;
+      margin: 8px 0;
+      font-size: 1.1rem;
+    }
+
+    .crop-card button {
+      background-color: #00ff88;
+      color: #000;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+
+    .crop-card button:hover {
+      background-color: #00ff88;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--text-color);
+    }
+
+    /* Chatbot */
+    .chatbot-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background:#00ff88;
+      color: #000;
+      border: none;
+      padding: 14px;
+      border-radius: 50%;
+      font-size: 1.6rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .chatbot-box {
+      position: fixed;
+      bottom: 90px;
+      right: 25px;
+      width: 320px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 200;
+    }
+
+    .chatbot-header {
+      background: var(--accent-color);
+      color: #000;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .chatbot-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .chatbot-input {
+      display: flex;
+      border-top: 1px solid #333;
+    }
+
+    .chatbot-input input {
+      flex: 1;
+      border: none;
+      padding: 10px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      outline: none;
+    }
+
+    .chatbot-input button {
+      background: var(--accent-color);
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .bot, .user {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 85%;
+      line-height: 1.4;
+    }
+
+    .user { background: var(--accent-color); color: #000; align-self: flex-end; margin-left: auto; }
+    .bot { background: var(--bg-color); color: var(--text-color); border: 1px solid #444; }
+  </style>
+</head>
+<body>
+ <header>
+    <div class="logo"><i class="ri-leaf-line"></i> AgroLinkX</div>
+    <nav>
+      <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
+      <button id="browseBtn" class="active"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
+      <button id="cartBtn"><i class="ri-shopping-cart-line"></i> <span>Cart</span></button>
+      <button id="themeToggle"><i class="ri-sun-line"></i></button>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+      <button id="logoutBtn"><i class="ri-logout-box-line"></i> <span>Logout</span></button>
+    </nav>
+  </header>
+  <main style="margin-top:100px; padding:2rem;">
+    <h1>🌾 Browse Available Crops</h1>
+
+  <div class="filter-bar">
+    <input type="text" placeholder="Search crops..." id="searchInput" onkeyup="searchCrops()">
+    <button onclick="filterCategory('all')">All</button>
+    <button onclick="filterCategory('Vegetables')">Vegetables</button>
+    <button onclick="filterCategory('Fruits')">Fruits</button>
+    <button onclick="filterCategory('Grains')">Grains</button>
+    <button onclick="filterCategory('Spices')">Spices</button>
+  </div>
+
+  <div class="crop-container" id="cropContainer"></div>
+
+  <button class="chatbot-btn" id="chatToggle"><i class="ri-robot-line"></i></button>
+
+  <div class="chatbot-box" id="chatBox">
+    <div class="chatbot-header">🤖 AgroBot — Ask about Crops!</div>
+    <div class="chatbot-messages" id="chatMessages">
+      <div class="bot">Hi there! 🌱 Ask me about crops, fertilizers, or farming tips.</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="userInput" placeholder="Type your question..." />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    // 🥦 Display crops (both default + user-added)
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("cropContainer");
+
+      // Default crops (already existing)
+      const defaultCrops = [
+        { cropName: "Red Apples", price: 80, description: "Fresh red apples", category: "Fruits", imageURL: "assets/apple.jpg", quantity: 100 },
+        { cropName: "Organic Bananas", price: 60, description: "Sweet ripe bananas", category: "Fruits", imageURL: "assets/banana.jpg", quantity: 200 },
+        { cropName: "Fresh Mangoes", price: 90, description: "Tasty mangoes", category: "Fruits", imageURL: "assets/mango.jpg", quantity: 150 },
+        { cropName: "Tomatoes", price: 45, description: "Juicy tomatoes", category: "Vegetables", imageURL: "assets/tomato.jpg", quantity: 100 },
+        { cropName: "Potatoes", price: 35, description: "Fresh potatoes", category: "Vegetables", imageURL: "assets/potato.jpg", quantity: 100 },
+        { cropName: "Onions", price: 50, description: "Red onions", category: "Vegetables", imageURL: "assets/onion.jpg", quantity: 100 },
+        { cropName: "Organic Rice", price: 75, description: "High quality rice", category: "Grains", imageURL: "assets/rice.jpg", quantity: 100 },
+        { cropName: "Golden Wheat", price: 65, description: "Rich wheat grains", category: "Grains", imageURL: "assets/wheat.jpg", quantity: 100 },
+        { cropName: "Pure Turmeric", price: 120, description: "Organic turmeric", category: "Spices", imageURL: "assets/turmeric.jpg", quantity: 100 },
+        { cropName: "Chilies", price: 180, description: "Hot red chilies", category: "Spices", imageURL: "assets/chili.jpg", quantity: 100 },
+      ];
+
+      // Get user-added crops
+      const userCrops = JSON.parse(localStorage.getItem("crops")) || [];
+      const allCrops = [...defaultCrops, ...userCrops];
+
+      if (allCrops.length === 0) {
+        container.innerHTML = "<p style='text-align:center; color:#999;'>No crops available.</p>";
+        return;
+      }
+
+      container.innerHTML = allCrops.map(crop => `
+        <div class="crop-card" data-category="${crop.category}">
+          <img src="${crop.imageURL}" alt="${crop.cropName}">
+          <h3>${crop.cropName}</h3>
+          <p>${crop.description}</p>
+          <p>Category: ${crop.category}</p>
+          <p class="price">₹${crop.price}</p>
+          <button class="add-to-cart" data-name="${crop.cropName}" data-price="${crop.price}">Add to Cart</button>
+        </div>
+      `).join("");
+    });
+
+    // 🛒 Add to cart
+   document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-cart")) {
+    const card = e.target.closest('.crop-card');
+    const name = e.target.dataset.name;
+    const price = parseFloat(e.target.dataset.price);
+    const image = card.querySelector('img').src;
+    const farmer = "Local Farmer"; // you can make this dynamic later
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existing = cart.find(item => item.name === name);
+
+    if (existing) existing.quantity++;
+    else cart.push({ name, price, quantity: 1, image, farmer });
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    alert(`${name} added to cart 🛒`);
+  }
+});
+
+
+    // 🔍 Search crops
+    function searchCrops() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".crop-card");
+      cards.forEach(card => {
+        const title = card.querySelector("h3").textContent.toLowerCase();
+        card.style.display = title.includes(input) ? "block" : "none";
+      });
+    }
+
+    // 🥗 Filter by category
+    function filterCategory(category) {
+      const cards = document.querySelectorAll(".crop-card");
+      cards.forEach(card => {
+        card.style.display = (category === 'all' || card.dataset.category === category) ? "block" : "none";
+      });
+    }
+
+    // 🌙 Theme toggle
+    const toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark");
+      toggle.innerHTML = document.body.classList.contains("dark")
+        ? '<i class="ri-sun-line"></i>'
+        : '<i class="ri-moon-line"></i>';
+    });
+
+    // 🤖 Chatbot
+    const chatToggle = document.getElementById('chatToggle');
+    const chatBox = document.getElementById('chatBox');
+    const sendBtn = document.getElementById('sendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    const userInput = document.getElementById('userInput');
+
+    chatToggle.addEventListener('click', () => {
+      chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+      chatBox.style.flexDirection = 'column';
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+
+    async function sendMessage() {
+      const text = userInput.value.trim();
+      if (!text) return;
+      appendMessage('user', text);
+      userInput.value = '';
+      appendMessage('bot', 'Thinking...');
+      const reply = await getBotResponse(text);
+      chatMessages.lastElementChild.remove();
+      appendMessage('bot', reply);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function appendMessage(sender, msg) {
+      const div = document.createElement('div');
+      div.className = sender;
+      div.textContent = msg;
+      chatMessages.appendChild(div);
+    }
+
+    async function getBotResponse(query) {
+      query = query.toLowerCase();
+      if (query.includes('fertilizer'))
+        return '🌿 Use organic compost or NPK 10:26:26 for balanced soil nutrients.';
+      if (query.includes('irrigation'))
+        return '💧 Drip irrigation is best for saving water and ensuring proper hydration.';
+      if (query.includes('pest'))
+        return '🐛 Neem oil spray helps naturally control common crop pests.';
+      if (query.includes('soil'))
+        return '🪴 Loamy soil is ideal for most crops due to good drainage and nutrients.';
+      if (query.includes('wheat'))
+        return '🌾 Wheat grows best in cool climates with well-drained loamy soil.';
+      if (query.includes('mango'))
+        return '🥭 Mango trees thrive in tropical climates with moderate rainfall.';
+      return '🤖 I’m still learning! Try asking about fertilizer, irrigation, soil, or specific crops.';
+    }
+     // 🌾 Navbar button navigation
+  document.getElementById("homeBtn").addEventListener("click", () => {
+    window.location.href = "index.html";
+  });
+
+  document.getElementById("browseBtn").addEventListener("click", () => {
+    window.location.href = "browse.html";
+  });
+
+  document.getElementById("cartBtn").addEventListener("click", () => {
+    window.location.href = "cart.html";
+  });
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("isLoggedIn");
+    alert("You have been logged out 🌾");
+    window.location.href = "login.html";
+  });
+// 🌍 --- MULTI-LANGUAGE SUPPORT ---
+const translations = {
+  en: {
+    home: "Home",
+    browse: "Browse Crops",
+    cart: "Cart",
+    logout: "Logout",
+    heading: "🌾 Browse Available Crops",
+    search: "Search crops...",
+    all: "All",
+    vegetables: "Vegetables",
+    fruits: "Fruits",
+    grains: "Grains",
+    spices: "Spices",
+    chatbot_greet: "Hi there! 🌱 Ask me about crops, fertilizers, or farming tips.",
+    chatbot_header: "🤖 AgroBot — Ask about Crops!",
+    chatbot_placeholder: "Type your question...",
+    chatbot_send: "Send"
+  },
+  ta: {
+    home: "முகப்பு",
+    browse: "பயிர்களை உலாவவும்",
+    cart: "வண்டி",
+    logout: "வெளியேறு",
+    heading: "🌾 கிடைக்கும் பயிர்களை பார்வையிடுங்கள்",
+    search: "பயிர்களை தேடுங்கள்...",
+    all: "அனைத்தும்",
+    vegetables: "காய்கறிகள்",
+    fruits: "பழங்கள்",
+    grains: "தானியங்கள்",
+    spices: "மசாலாக்கள்",
+    chatbot_greet: "வணக்கம்! 🌱 பயிர்கள், உரங்கள் அல்லது விவசாய உதவிகள் பற்றி என்னிடம் கேளுங்கள்.",
+    chatbot_header: "🤖 அக்கிரோபாட் — பயிர்களை பற்றி கேளுங்கள்!",
+    chatbot_placeholder: "உங்கள் கேள்வியை type செய்யுங்கள்...",
+    chatbot_send: "அனுப்பு"
+  }
+};
+
+const langSelect = document.getElementById("languageSelect");
+
+function setLanguage(lang) {
+  const t = translations[lang];
+
+  // Navbar
+  document.querySelector("#homeBtn span").textContent = t.home;
+  document.querySelector("#browseBtn span").textContent = t.browse;
+  document.querySelector("#cartBtn span").textContent = t.cart;
+  document.querySelector("#logoutBtn span").textContent = t.logout;
+
+  // Heading
+  document.querySelector("main h1").textContent = t.heading;
+
+  // Filter Buttons
+  const filterBtns = document.querySelectorAll(".filter-bar button");
+  filterBtns[0].textContent = t.all;
+  filterBtns[1].textContent = t.vegetables;
+  filterBtns[2].textContent = t.fruits;
+  filterBtns[3].textContent = t.grains;
+  filterBtns[4].textContent = t.spices;
+
+  // Search Bar Placeholder
+  document.getElementById("searchInput").placeholder = t.search;
+
+  // Chatbot Elements
+  document.querySelector(".chatbot-header").textContent = t.chatbot_header;
+  document.getElementById("userInput").placeholder = t.chatbot_placeholder;
+  document.getElementById("sendBtn").textContent = t.chatbot_send;
+
+  const firstBotMsg = document.querySelector(".chatbot-messages .bot");
+  if (firstBotMsg) firstBotMsg.textContent = t.chatbot_greet;
+}
+
+// Language change handler
+langSelect.addEventListener("change", () => {
+  const lang = langSelect.value;
+  localStorage.setItem("selectedLang", lang);
+  setLanguage(lang);
+});
+
+// Load saved language preference
+window.addEventListener("DOMContentLoaded", () => {
+  const savedLang = localStorage.getItem("selectedLang") || "en";
+  langSelect.value = savedLang;
+  setLanguage(savedLang);
+});
+
+  </script>
+</body>
+</html>

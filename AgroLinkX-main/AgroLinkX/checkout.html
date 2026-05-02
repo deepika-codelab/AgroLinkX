@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | AgroLinkX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+      transition: 0.3s;
+    }
+
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000;
+      --card-bg: #f5f5f5;
+      --accent-color: #00ff88;
+    }
+
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #fff;
+      --card-bg: #1a1a1a;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: var(--card-bg);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo { font-weight: bold; }
+
+    .checkout-container {
+      max-width: 700px;
+      margin: 50px auto;
+      background: var(--card-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .checkout-title {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 25px;
+      color: var(--accent-color);
+    }
+
+    form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+
+    form input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      margin-top: 5px;
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+    form button {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 1rem;
+      background: var(--accent-color);
+      color: #000;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    form button:hover {
+      background: #00cc6e;
+    }
+
+    .success-message {
+      text-align: center;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🌿 AgroLinkX</div>
+    <a href="browse.html" style="text-decoration:none; color:var(--text-color); font-weight:600;">← Back to Browse</a>
+  </nav>
+
+  <div class="checkout-container">
+    <h2 class="checkout-title">Checkout</h2>
+    <form id="checkoutForm">
+      <label>Full Name</label>
+      <input type="text" id="name" required>
+
+      <label>Address</label>
+      <input type="text" id="address" required>
+
+      <label>Phone Number</label>
+      <input type="tel" id="phone" required>
+
+      <label>Payment Method</label>
+      <input type="text" placeholder="UPI / Card / Cash on Delivery" id="payment" required>
+
+      <button type="submit">Confirm Order</button>
+    </form>
+
+    <div class="success-message" id="successMsg"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("checkoutForm");
+    const msg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      localStorage.removeItem('cart'); // clear cart after checkout
+      msg.textContent = "✅ Order placed successfully! Thank you for shopping with AgroLinkX 🌿";
+      form.reset();
+      setTimeout(() => {
+        window.location.href = "browse.html"; // redirect to browse page
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

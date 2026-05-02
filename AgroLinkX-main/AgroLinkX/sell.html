@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sell Your Crops | AgroLinkX</title>
+
+  <!-- Google Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet">
+
+  <!-- Common Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .sell-page {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 120px;
+      min-height: 100vh;
+      background: var(--input-bg);
+    }
+
+    .sell-container {
+      background: var(--nav-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 40px 50px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    .sell-container h1 {
+      color: var(--button-bg);
+      margin-bottom: 25px;
+      font-size: 2rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea, select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+    }
+
+    input[type="file"] {
+      background: var(--input-bg);
+      color: var(--text-color);
+      border: 1px dashed var(--button-bg);
+    }
+
+    button.submit-btn {
+      background: var(--button-bg);
+      color: var(--button-text);
+      font-weight: 700;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+
+    button.submit-btn:hover {
+      background: #15803d;
+      color: white;
+    }
+
+    .success-msg {
+      display: none;
+      text-align: center;
+      margin-top: 15px;
+      color: var(--button-text);
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <!-- ✅ Navbar -->
+  <header>
+    <div class="logo"><i class="ri-leaf-line"></i> AgroLinkX</div>
+    <nav>
+      <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
+      <button id="browseBtn"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
+      <button id="themeToggle"><i class="ri-sun-line"></i></button>
+      <select id="languageSelect">
+        <option value="en">English</option>
+        <option value="ta">தமிழ்</option>
+      </select>
+      <button id="loginBtn"><i class="ri-login-box-line"></i> <span>Login</span></button>
+    </nav>
+  </header>
+
+  <!-- 🌾 Sell Page -->
+  <section class="sell-page">
+    <div class="sell-container">
+      <h1 id="sellTitle">Sell Your Crops</h1>
+      <form id="sellForm">
+        <input type="text" id="cropName" placeholder="Crop Name" required />
+        <input type="number" id="price" placeholder="Price (₹ per kg)" required />
+        <input type="number" id="quantity" placeholder="Available Quantity (kg)" required />
+        <textarea id="description" rows="3" placeholder="Crop Description"></textarea>
+        <select id="category" required>
+          <option value="" disabled selected>Select Category</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Vegetables">Vegetables</option>
+          <option value="Grains">Grains</option>
+          <option value="Pulses">Pulses</option>
+        </select>
+        <input type="file" id="image" accept="image/*" required />
+        <button type="submit" class="submit-btn" id="submitBtn">Add Crop</button>
+      </form>
+      <div class="success-msg" id="successMsg">✅ Crop added successfully!</div>
+    </div>
+  </section>
+
+  <script>
+    // 🌙 Theme Toggle
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      const body = document.body;
+      const currentTheme = body.getAttribute("data-theme");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      body.setAttribute("data-theme", newTheme);
+      themeToggle.innerHTML = newTheme === "light"
+        ? '<i class="ri-sun-line"></i>'
+        : '<i class="ri-moon-line"></i>';
+    });
+
+    // 🔗 Navigation
+    document.getElementById("homeBtn").addEventListener("click", () => window.location.href = "index.html");
+    document.getElementById("browseBtn").addEventListener("click", () => window.location.href = "browse.html");
+    document.getElementById("loginBtn").addEventListener("click", () => window.location.href = "login.html");
+
+    // 🌐 Multi-language Translations
+    const translations = {
+      en: {
+        home: "Home",
+        browse: "Browse Crops",
+        login: "Login",
+        sellTitle: "Sell Your Crops",
+        cropName: "Crop Name",
+        price: "Price (₹ per kg)",
+        quantity: "Available Quantity (kg)",
+        description: "Crop Description",
+        selectCategory: "Select Category",
+        fruits: "Fruits",
+        vegetables: "Vegetables",
+        grains: "Grains",
+        pulses: "Pulses",
+        addCrop: "Add Crop",
+        success: "✅ Crop added successfully!"
+      },
+      ta: {
+        home: "முகப்பு",
+        browse: "பயிர்களை உலாவவும்",
+        login: "உள்நுழை",
+        sellTitle: "உங்கள் பயிர்களை விற்கவும்",
+        cropName: "பயிர் பெயர்",
+        price: "விலை (₹ கிலோக்கு)",
+        quantity: "கிடைக்கும் அளவு (கிலோ)",
+        description: "பயிர் விவரம்",
+        selectCategory: "வகையைத் தேர்ந்தெடுக்கவும்",
+        fruits: "பழங்கள்",
+        vegetables: "காய்கறிகள்",
+        grains: "தானியங்கள்",
+        pulses: "பயறு வகைகள்",
+        addCrop: "பயிர் சேர்க்கவும்",
+        success: "✅ பயிர் வெற்றிகரமாக சேர்க்கப்பட்டது!"
+      }
+    };
+
+    const langSelect = document.getElementById("languageSelect");
+
+    function updateLanguage(lang) {
+      const t = translations[lang];
+      document.getElementById("homeBtn").querySelector("span").textContent = t.home;
+      document.getElementById("browseBtn").querySelector("span").textContent = t.browse;
+      document.getElementById("loginBtn").querySelector("span").textContent = t.login;
+
+      document.getElementById("sellTitle").textContent = t.sellTitle;
+      document.getElementById("cropName").placeholder = t.cropName;
+      document.getElementById("price").placeholder = t.price;
+      document.getElementById("quantity").placeholder = t.quantity;
+      document.getElementById("description").placeholder = t.description;
+
+      const category = document.getElementById("category");
+      category.options[0].text = t.selectCategory;
+      category.options[1].text = t.fruits;
+      category.options[2].text = t.vegetables;
+      category.options[3].text = t.grains;
+      category.options[4].text = t.pulses;
+
+      document.getElementById("submitBtn").textContent = t.addCrop;
+      document.getElementById("successMsg").textContent = t.success;
+    }
+
+    langSelect.addEventListener("change", () => updateLanguage(langSelect.value));
+
+    // 🧺 Crop Submission
+    const form = document.getElementById("sellForm");
+    const successMsg = document.getElementById("successMsg");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const crop = {
+        cropName: document.getElementById("cropName").value,
+        price: document.getElementById("price").value,
+        quantity: document.getElementById("quantity").value,
+        description: document.getElementById("description").value,
+        category: document.getElementById("category").value
+      };
+
+      const file = document.getElementById("image").files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        crop.imageURL = reader.result;
+        let crops = JSON.parse(localStorage.getItem("crops")) || [];
+        crops.push(crop);
+        localStorage.setItem("crops", JSON.stringify(crops));
+
+        successMsg.style.display = "block";
+        form.reset();
+        setTimeout(() => {
+          successMsg.style.display = "none";
+          window.location.href = "browse.html";
+        }, 2000);
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>

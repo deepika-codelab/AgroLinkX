@@ -1,0 +1,268 @@
+/* 🌗 THEME VARIABLES */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --nav-bg: #f9fafb;
+  --button-bg: #16a34a;
+  --button-text: #ffffff;
+  --input-bg: #f3f4f6;
+  --border-color: #d1d5db;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0a0a0a;
+  --text-color: #ffffff;
+  --nav-bg: #111111;
+  --button-bg: #22c55e;
+  --button-text: #000000;
+  --input-bg: #1f1f1f;
+  --border-color: #333333;
+}
+
+/* 🌎 GLOBAL STYLES */
+* {
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ✅ FIXED NAVBAR (common for all pages) */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--nav-bg);
+  border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: var(--button-bg);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo i {
+  font-size: 1.6rem;
+  color: var(--button-bg);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+nav button,
+nav select {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.3s;
+}
+
+nav button:hover {
+  color: var(--button-bg);
+}
+
+#loginBtn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+}
+
+#loginBtn:hover {
+  background: #15803d;
+  color: white;
+}
+
+select {
+  border-radius: 6px;
+  padding: 0.3rem;
+  border: 1px solid var(--button-bg);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* 🏠 HERO SECTION (Home page) */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 6rem 2rem 4rem;
+  background: linear-gradient(to right, var(--bg-color), rgba(0,0,0,0.05));
+  margin-top: 70px;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+}
+
+.hero-text h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-text p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.85;
+}
+
+.buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.buttons button {
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.shop {
+  background: var(--button-bg);
+  color: var(--button-text);
+}
+
+.shop:hover {
+  background: #15803d;
+  color: white;
+}
+
+.sell {
+  background: transparent;
+  border: 1px solid var(--button-bg);
+  color: var(--button-bg);
+}
+
+.sell:hover {
+  background: var(--button-bg);
+  color: white;
+}
+
+.hero-img img {
+  width: 800px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+/* 📱 RESPONSIVE */
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-img img {
+    margin-top: 2rem;
+    width: 90%;
+  }
+}
+
+/* 🔐 LOGIN PAGE */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin-top: 80px;
+}
+
+.login-box {
+  background: var(--nav-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 40px;
+  width: 350px;
+  text-align: center;
+}
+
+.login-box img {
+  width: 60px;
+  margin-bottom: 15px;
+}
+
+.login-box h2 {
+  margin-bottom: 8px;
+}
+
+.login-box p {
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.login-box label {
+  display: block;
+  text-align: left;
+  font-size: 14px;
+  margin: 10px 0 5px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 10px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+.login-box button {
+  width: 100%;
+  background: var(--button-bg);
+  border: none;
+  color: var(--button-text);
+  padding: 12px;
+  margin-top: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.login-box button:hover {
+  background: #15803d;
+}
+
+.signup-text {
+  margin-top: 15px;
+}
+
+.signup-text a {
+  color: var(--button-bg);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
