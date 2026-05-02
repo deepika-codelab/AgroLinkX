@@ -1,4 +1,6 @@
 // server.js
+import dotenv from 'dotenv';
+dotenv.config();
 import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
@@ -8,7 +10,7 @@ app.use(express.json());
 app.use(cors());
 
 // 🔹 Your Gemini API key (keep secret)
-const GEMINI_API_KEY = "AIzaSyBMM2sYD0gu2UqJDe9PBW_8GRJppVW2Xjs";
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 // 🔹 Helper: Mock AI response (if Gemini fails)
 function mockAIResponse(message) {
