@@ -256,6 +256,7 @@
       <button id="homeBtn"><i class="ri-home-4-line"></i> <span>Home</span></button>
       <button id="browseBtn" class="active"><i class="ri-seedling-line"></i> <span>Browse Crops</span></button>
       <button id="cartBtn"><i class="ri-shopping-cart-line"></i> <span>Cart</span></button>
+      
       <button id="themeToggle"><i class="ri-sun-line"></i></button>
       <select id="languageSelect">
         <option value="en">English</option>
@@ -294,24 +295,35 @@
   <script>
     // 🥦 Display crops (both default + user-added)
     document.addEventListener("DOMContentLoaded", () => {
-      const container = document.getElementById("cropContainer");
+  const container = document.getElementById("cropContainer");
 
-      // Default crops (already existing)
-      const defaultCrops = [
-        { cropName: "Red Apples", price: 80, description: "Fresh red apples", category: "Fruits", imageURL: "assets/apple.jpg", quantity: 100 },
-        { cropName: "Organic Bananas", price: 60, description: "Sweet ripe bananas", category: "Fruits", imageURL: "assets/banana.jpg", quantity: 200 },
-        { cropName: "Fresh Mangoes", price: 90, description: "Tasty mangoes", category: "Fruits", imageURL: "assets/mango.jpg", quantity: 150 },
-        { cropName: "Tomatoes", price: 45, description: "Juicy tomatoes", category: "Vegetables", imageURL: "assets/tomato.jpg", quantity: 100 },
-        { cropName: "Potatoes", price: 35, description: "Fresh potatoes", category: "Vegetables", imageURL: "assets/potato.jpg", quantity: 100 },
-        { cropName: "Onions", price: 50, description: "Red onions", category: "Vegetables", imageURL: "assets/onion.jpg", quantity: 100 },
-        { cropName: "Organic Rice", price: 75, description: "High quality rice", category: "Grains", imageURL: "assets/rice.jpg", quantity: 100 },
-        { cropName: "Golden Wheat", price: 65, description: "Rich wheat grains", category: "Grains", imageURL: "assets/wheat.jpg", quantity: 100 },
-        { cropName: "Pure Turmeric", price: 120, description: "Organic turmeric", category: "Spices", imageURL: "assets/turmeric.jpg", quantity: 100 },
-        { cropName: "Chilies", price: 180, description: "Hot red chilies", category: "Spices", imageURL: "assets/chili.jpg", quantity: 100 },
-      ];
+  // Default crops
+  const defaultCrops = [
+    { cropName: "Red Apples", price: 80, description: "Fresh red apples", category: "Fruits", imageURL: "assets/apple.jpg", quantity: 100 },
+    { cropName: "Organic Bananas", price: 60, description: "Sweet ripe bananas", category: "Fruits", imageURL: "assets/banana.jpg", quantity: 200 },
+    { cropName: "Fresh Mangoes", price: 90, description: "Tasty mangoes", category: "Fruits", imageURL: "assets/mango.jpg", quantity: 150 },
+    { cropName: "Tomatoes", price: 45, description: "Juicy tomatoes", category: "Vegetables", imageURL: "assets/tomato.jpg", quantity: 100 },
+    { cropName: "Potatoes", price: 35, description: "Fresh potatoes", category: "Vegetables", imageURL: "assets/potato.jpg", quantity: 100 },
+    { cropName: "Onions", price: 50, description: "Red onions", category: "Vegetables", imageURL: "assets/onion.jpg", quantity: 100 },
+    { cropName: "Organic Rice", price: 75, description: "High quality rice", category: "Grains", imageURL: "assets/rice.jpg", quantity: 100 },
+    { cropName: "Golden Wheat", price: 65, description: "Rich wheat grains", category: "Grains", imageURL: "assets/wheat.jpg", quantity: 100 },
+    { cropName: "Pure Turmeric", price: 120, description: "Organic turmeric", category: "Spices", imageURL: "assets/turmeric.jpg", quantity: 100 },
+    { cropName: "Chilies", price: 180, description: "Hot red chilies", category: "Spices", imageURL: "assets/chili.jpg", quantity: 100 },
+  ];
+  // 🔥 Backend இருந்து data fetch
+  fetch("http://127.0.0.1:5000/get-products")
+    .then(res => res.json())
+    .then(data => {
 
-      // Get user-added crops
-      const userCrops = JSON.parse(localStorage.getItem("crops")) || [];
+      const userCrops = data.map(item => ({
+        cropName: item.name,
+        price: item.price,
+        description: "Farmer added crop",
+        category: "Others",
+        imageURL: "assets/default.jpg",
+        quantity: item.quantity
+      }));
+
       const allCrops = [...defaultCrops, ...userCrops];
 
       if (allCrops.length === 0) {
@@ -320,16 +332,26 @@
       }
 
       container.innerHTML = allCrops.map(crop => `
-        <div class="crop-card" data-category="${crop.category}">
-          <img src="${crop.imageURL}" alt="${crop.cropName}">
-          <h3>${crop.cropName}</h3>
-          <p>${crop.description}</p>
-          <p>Category: ${crop.category}</p>
-          <p class="price">₹${crop.price}</p>
-          <button class="add-to-cart" data-name="${crop.cropName}" data-price="${crop.price}">Add to Cart</button>
-        </div>
-      `).join("");
+  <div class="crop-card" data-category="${crop.category}">
+    <img src="${crop.imageURL}" alt="${crop.cropName}">
+    <h3>${crop.cropName}</h3>
+    <p>${crop.description}</p>
+    <p>Category: ${crop.category}</p>
+    <p class="price">₹${crop.price}</p>
+
+    ${crop.id ? `<button onclick="deleteCrop(${crop.id})">❌ Delete</button>` : ""}
+
+    <button class="add-to-cart" data-name="${crop.cropName}" data-price="${crop.price}">
+      Add to Cart
+    </button>
+  </div>
+`).join("");
+
+    })
+    .catch(err => {
+      console.error("Error fetching products:", err);
     });
+});
 
     // 🛒 Add to cart
    document.addEventListener("click", (e) => {
@@ -429,6 +451,18 @@
         return '🥭 Mango trees thrive in tropical climates with moderate rainfall.';
       return '🤖 I’m still learning! Try asking about fertilizer, irrigation, soil, or specific crops.';
     }
+    function deleteCrop(id) {
+  if (!confirm("Are you sure you want to delete this crop?")) return;
+
+  fetch(`http://127.0.0.1:5000/delete-product/${id}`, {
+    method: "DELETE"
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+    location.reload();
+  });
+}
      // 🌾 Navbar button navigation
   document.getElementById("homeBtn").addEventListener("click", () => {
     window.location.href = "index.html";
